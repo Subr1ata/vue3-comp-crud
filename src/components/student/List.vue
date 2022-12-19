@@ -1,11 +1,16 @@
 <script setup>
-import { RouterLink } from "vue-router";
 import {
   EyeIcon,
   PencilIcon,
   TrashIcon,
   UserPlusIcon,
 } from "@heroicons/vue/24/solid";
+import { onMounted } from "vue";
+import { RouterLink } from "vue-router";
+import useStudent from "../../composables/studentApi";
+
+const { studentData, error, getAllStudent } = useStudent();
+onMounted(getAllStudent);
 
 const deleteStudent = async (id) => {
   if (!window.confirm("Are you sure ?")) {
@@ -25,8 +30,7 @@ const deleteStudent = async (id) => {
       </div>
       <div class="text-right">
         <RouterLink :to="{ name: 'add' }">
-          <button
-            class="
+          <button class="
               text-white text-md
               bg-green-700
               hover:bg-green-800
@@ -34,8 +38,7 @@ const deleteStudent = async (id) => {
               rounded-lg
               p-2
               px-6
-            "
-          >
+            ">
             <UserPlusIcon /> Add
           </button>
         </RouterLink>
@@ -52,7 +55,7 @@ const deleteStudent = async (id) => {
         </tr>
       </thead>
       <tbody class="text-center">
-        <tr>
+        <tr v-for="({ id, stuname, email }, i) in studentData" :key="id">
           <td class="py-2">1</td>
           <td class="py-2">Sonam</td>
           <td class="py-2">sonam@gmail.com</td>
@@ -65,10 +68,7 @@ const deleteStudent = async (id) => {
               <PencilIcon class="text-emerald-500 h-6 w-6 mx-6 inline" />
             </RouterLink>
 
-            <TrashIcon
-              class="text-red-500 h-6 w-6 inline cursor-pointer"
-              @click="deleteStudent(1)"
-            />
+            <TrashIcon class="text-red-500 h-6 w-6 inline cursor-pointer" @click="deleteStudent(1)" />
           </td>
         </tr>
       </tbody>
@@ -79,4 +79,5 @@ const deleteStudent = async (id) => {
 </template>
 
 <style scoped>
+
 </style>
